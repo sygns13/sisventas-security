@@ -1,4 +1,4 @@
-package com.bcs.security.utils;
+/*package com.bcs.security.utils;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -44,4 +44,4 @@ public class CORS implements Filter {
 
     }
 
-}
+}*/

@@ -13,15 +13,50 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.sql.DataSource;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager ;
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Value("${security.jwt.client-id}")
+    private String clientId;
+
+    @Value("${security.jwt.client-secret}")
+    private String clientSecret;
+
+    @Value("${security.jwt.grant-type1}")
+    private String grantType1;
+
+    @Value("${security.jwt.grant-type2}")
+    private String grantType2;
+
+    @Value("${security.jwt.scope-read}")
+    private String scopeRead;
+
+    @Value("${security.jwt.scope-write}")
+    private String scopeWrite;
+
+    @Value("${security.signing-key}")
+    private String signingKey;
+
+    @Value("${security.jwt.resource-ids}")
+    private String resourceIds;
+
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         // TODO Auto-generated method stub
@@ -32,9 +67,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         // TODO Auto-generated method stub
-        clients.inMemory().withClient("webAngular")
-                .secret(passwordEncoder.encode("123456")).scopes("read","write")	//Clave del cliente	angular
-                .authorizedGrantTypes("password","refresh_token")
+        clients.inMemory().withClient(clientId)
+                .secret(passwordEncoder.encode(clientSecret)).scopes(scopeRead,scopeWrite)	//Clave del cliente	angular
+                .authorizedGrantTypes(grantType1,grantType2)
                 .accessTokenValiditySeconds(1800)
                 .refreshTokenValiditySeconds(3600);
     }
@@ -49,14 +84,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     @Bean
-    public JwtTokenStore tokenStore() {
+    public JdbcTokenStore tokenStore() {
 
-        return new JwtTokenStore(accessTokenConverter());
+        //return new JwtTokenStore(accessTokenConverter()); //EN MEMORIA
+        return new JdbcTokenStore(this.dataSource); //EN BASE DE DATOS
     }
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-        tokenConverter.setSigningKey("123456"); //firma del microservicio para el api gateway
+        tokenConverter.setSigningKey(signingKey); //firma del microservicio para el api gateway
         return tokenConverter ;
     }
 
