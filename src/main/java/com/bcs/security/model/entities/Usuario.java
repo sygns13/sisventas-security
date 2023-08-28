@@ -10,7 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Schema(description = "Venta Model")
+@Schema(description = "User Model")
 @Entity
 @Table(name = "users")
 public class Usuario implements Serializable {

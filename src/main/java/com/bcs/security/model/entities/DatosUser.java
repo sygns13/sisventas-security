@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@Schema(description = "Datos User Model")
 @Entity
 @Table(name = "datos_users")
 public class DatosUser implements Serializable {
@@ -57,7 +58,7 @@ public class DatosUser implements Serializable {
     @Schema(description = "Tipo de Documento de Identidad")
     @ManyToOne
     @JoinColumn(name = "tipo_documento_id", nullable = false, foreignKey = @ForeignKey(name = "FK_tipodocumento_datouser"))
-    private TipoUser tipoDocumento;
+    private TipoDocumento tipoDocumento;
 
     @Schema(description = "Documento de Identidad")
     @NotNull(message = "{datos_users.documento.notnull}")
@@ -104,7 +105,7 @@ public class DatosUser implements Serializable {
     public DatosUser() {
     }
 
-    public DatosUser(Long id, String nombres, String apellidoPaterno, String apellidoMaterno, String direccion, String telefono, TipoUser tipoDocumento, String documento, String email, Long userId, Long userGestionaId, Long empresaId, Integer activo, Integer borrado) {
+    public DatosUser(Long id, String nombres, String apellidoPaterno, String apellidoMaterno, String direccion, String telefono, TipoDocumento tipoDocumento, String documento, String email, Long userId, Long userGestionaId, Long empresaId, Integer activo, Integer borrado) {
         this.id = id;
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
@@ -121,7 +122,7 @@ public class DatosUser implements Serializable {
         this.borrado = borrado;
     }
 
-    public DatosUser(Long id, String nombres, String apellidoPaterno, String apellidoMaterno, String direccion, String telefono, TipoUser tipoDocumento, String documento, String email, Long userId, Long userGestionaId, Long empresaId, Integer activo, Integer borrado, LocalDateTime createdAt, LocalDateTime updatedAd) {
+    public DatosUser(Long id, String nombres, String apellidoPaterno, String apellidoMaterno, String direccion, String telefono, TipoDocumento tipoDocumento, String documento, String email, Long userId, Long userGestionaId, Long empresaId, Integer activo, Integer borrado, LocalDateTime createdAt, LocalDateTime updatedAd) {
         this.id = id;
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
@@ -188,11 +189,11 @@ public class DatosUser implements Serializable {
         this.telefono = telefono;
     }
 
-    public TipoUser getTipoDocumento() {
+    public TipoDocumento getTipoDocumento() {
         return tipoDocumento;
     }
 
-    public void setTipoDocumento(TipoUser tipoDocumento) {
+    public void setTipoDocumento(TipoDocumento tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
     }
 
