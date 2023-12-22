@@ -59,9 +59,16 @@ public class Usuario implements Serializable {
     @Column(name="verification_token", nullable = true, length = 500)
     private String verificationToken;
 
+    /*
     @Schema(description = "ID Empresa Padre")
     @Column(name="empresa_id", nullable = true)
     private Long empresaId;
+    */
+
+    @Schema(description = "Empresa del Usuario")
+    @ManyToOne
+    @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(name = "FK_empresa_usuario"))
+    private Empresa empresa;
 
     @Schema(description = "ID User Padre")
     @Column(name="user_id", nullable = true)
@@ -85,37 +92,27 @@ public class Usuario implements Serializable {
     @Column(name="updated_at", nullable = true)
     private LocalDateTime updatedAd;
 
+    @Transient
+    private DatosUser datosUser;
+
     public Usuario() {
     }
 
-    public Usuario(Long id, String name, String email, String password, String remember_token, TipoUser tipoUser, String verificationToken, Long empresaId, Long userId, Integer activo, Integer borrado) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.remember_token = remember_token;
-        this.tipoUser = tipoUser;
-        this.verificationToken = verificationToken;
-        this.empresaId = empresaId;
-        this.userId = userId;
-        this.activo = activo;
-        this.borrado = borrado;
-    }
-
-    public Usuario(Long id, String name, String email, String password, String remember_token, TipoUser tipoUser, String verificationToken, Long empresaId, Long userId, Integer activo, Integer borrado, LocalDateTime createdAt, LocalDateTime updatedAd) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.remember_token = remember_token;
-        this.tipoUser = tipoUser;
-        this.verificationToken = verificationToken;
-        this.empresaId = empresaId;
-        this.userId = userId;
-        this.activo = activo;
-        this.borrado = borrado;
-        this.createdAt = createdAt;
-        this.updatedAd = updatedAd;
+    public Usuario(Usuario user) {
+        this.id = user.id;
+        this.name = user.name;
+        this.email = user.email;
+        this.password = user.password;
+        this.remember_token = user.remember_token;
+        this.tipoUser = user.tipoUser;
+        this.verificationToken = user.verificationToken;
+        this.empresa = user.empresa;
+        this.userId = user.userId;
+        this.activo = user.activo;
+        this.borrado = user.borrado;
+        this.createdAt = user.createdAt;
+        this.updatedAd = user.updatedAd;
+        this.datosUser = user.datosUser;
     }
 
     public Long getId() {
@@ -174,12 +171,12 @@ public class Usuario implements Serializable {
         this.verificationToken = verificationToken;
     }
 
-    public Long getEmpresaId() {
-        return empresaId;
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
-    public void setEmpresaId(Long empresaId) {
-        this.empresaId = empresaId;
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     public Long getUserId() {
@@ -220,5 +217,13 @@ public class Usuario implements Serializable {
 
     public void setUpdatedAd(LocalDateTime updatedAd) {
         this.updatedAd = updatedAd;
+    }
+
+    public DatosUser getDatosUser() {
+        return datosUser;
+    }
+
+    public void setDatosUser(DatosUser datosUser) {
+        this.datosUser = datosUser;
     }
 }
